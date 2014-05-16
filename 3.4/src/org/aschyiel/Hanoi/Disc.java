@@ -39,19 +39,4 @@ public class Disc
     }
     return them.size > this.size;
   }
-  
-  /**
-   * The opposite yo.
-   * @param them
-   * @return
-   */
-  public boolean isLargerThan( Disc them )
-  {
-    if ( null == them )
-    {
-      return true;
-    }
-    return them.isSmallerThan( this );
-  }
-  
 }

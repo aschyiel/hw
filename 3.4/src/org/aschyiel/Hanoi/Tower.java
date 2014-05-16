@@ -66,16 +66,6 @@ public class Tower implements Stack<Disc>
   public int size()
   {
     return _size;
-  }
-
-  public boolean isOdd()
-  {
-    return !isEven();
-  }
-
-  public boolean isEven()
-  {
-    return 0 == _size % 2;
-  }
+  } 
 
 }
