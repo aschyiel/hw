@@ -38,8 +38,8 @@ public class KnapsackVsTree
     
     Node<Integer> root = buildRandomTree( n, min, max );
     root.print();
-//    List<Path> paths = findPathsThatAddUp( root, target );
-//    printPaths( paths ); 
+    List<Path> paths = findPathsThatAddUp( root, target );
+    printPaths( paths ); 
   }
 
   public static Node<Integer> buildRandomTree( int n, int min, int max )

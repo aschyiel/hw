@@ -81,6 +81,11 @@ public class Node<T>
       
   }
   
+  public String getName()
+  {
+    return name;
+  }
+  
   public Node<T> getLeft()
   {
     return left;
