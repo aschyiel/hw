@@ -128,18 +128,21 @@ public class Node<T> implements Comparable<Node<T>>
    */
   public void print()
   {
-    print( "" );
+    print( "", null );
   } 
-  protected void print( String prefix )
+  protected void print( String prefix, Integer spin )
   {
     if ( null != right )
     {
-      right.print( prefix + ".   " );
+      right.print( prefix + ".   ", 1 );
     }
-    System.out.println( prefix + "|---" + this.toString() ); 
+    String c = ( null == spin )?
+        "-" : ( 1 == spin )?
+        "/" : "\\";
+    System.out.println( prefix + c + "---" + this.toString() ); 
     if ( null != left )
     {
-      left.print( prefix  + ".   " );
+      left.print( prefix  + ".   ", -1 );
     }
   }
 
