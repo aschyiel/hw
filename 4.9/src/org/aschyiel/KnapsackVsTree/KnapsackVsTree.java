@@ -30,10 +30,10 @@ public class KnapsackVsTree
   public static void main( String[] args )
   {
     // TODO Accept CLI parameters.
-    int n = 16;
+    int n = 32;
     int target = 21;
-    int min = 1;
-    int max = 11;
+    int min = -99;
+    int max =  99;
     
     Node<Integer> root = buildRandomTree( n, min, max );
     root.print();
