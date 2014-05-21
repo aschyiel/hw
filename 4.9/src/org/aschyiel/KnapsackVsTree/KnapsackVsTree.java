@@ -1,6 +1,5 @@
 package org.aschyiel.KnapsackVsTree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class KnapsackVsTree
     Node<Integer> root = buildRandomTree( n, min, max );
     root.print();
     List<Path> paths = findPathsThatAddUp( root, target );
-    printPaths( paths ); 
+    printPaths( paths, target ); 
   }
 
   public static Node<Integer> buildRandomTree( int n, int min, int max )
@@ -64,7 +63,7 @@ public class KnapsackVsTree
     return root;
   }
 
-  public static void printPaths( List<Path> li )
+  public static void printPaths( List<Path> li, Integer target )
   {
     if ( null != li )
     {
@@ -73,11 +72,17 @@ public class KnapsackVsTree
         System.out.println( it );
       }
     }
+    else
+    { 
+      System.out.println( "No paths found that add up to (" + target +")." );
+    }
   }
   
   public static List<Path> findPathsThatAddUp( Node<Integer> root, int target )
   {
-    return null;
+    return (new Solution( root, target ))
+        .solve()
+        .getPaths();
   }
   
   

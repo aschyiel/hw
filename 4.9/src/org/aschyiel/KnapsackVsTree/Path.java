@@ -2,7 +2,7 @@ package org.aschyiel.KnapsackVsTree;
 
 import tree.Node;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Path
@@ -14,7 +14,7 @@ public class Path
   
   public Path()
   {
-    nodes = new LinkedList<Node<Integer>>();
+    nodes = new ArrayList<Node<Integer>>();
     value = 0;
     to = null;
     from = null;
@@ -43,20 +43,51 @@ public class Path
   
   /**
    * Base our new path off of an existing one that is off by one node.
-   * @param dst The next node in the series we're tacking on.
+   * @param src The previous node in the series we're tacking-on/inserting.
    * @param prev The previous path we're basing ourselves off of.
    */
-  public Path( Node<Integer> dst, Path prev )
+  public Path( Node<Integer> src, Path prev )
   {
     this();
-    from = prev.from;
-    to = dst;
+    from = src;
+    to = prev.to;
+    nodes.add( src );
     for ( Node<Integer> it : prev.nodes )
     {
       nodes.add( it );
     }
-    nodes.add( dst );
-    value = prev.value + dst.getValue(); 
+    value = prev.value + src.getValue(); 
+  }
+  
+  /**
+   * Creates a reverse-version of the given path.
+   * @return
+   */
+  public static Path reverse( Path path )
+  {
+    Path htap  = new Path();
+    htap.from  = path.to;
+    htap.to    = path.from; 
+    htap.value = path.value;
+    
+    // Copy the node-path as is.
+    List<Node<Integer>> li = htap.nodes;
+    for ( Node<Integer> it : path.nodes )
+    {
+      li.add( it );
+    }
+    
+    // Then, reverse it (like a string).
+    for ( int i = 0, j = path.nodes.size() - 1;
+        i < j;
+        i++, j-- )
+    {
+      Node<Integer> tmp = li.get( i );
+      li.set( i, li.get( j ) );
+      li.set( j, tmp );
+    }
+    
+    return htap;
   }
   
   @Override

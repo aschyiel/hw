@@ -81,6 +81,19 @@ public class Node<T>
       
   }
   
+  /**
+   * Returns true for immediate neighbors or against itself.
+   * @return
+   */
+  public boolean isAdjacent( Node<T> them )
+  {
+    Node<T> us = this;
+    return us       == them ||
+           us.left  == them ||
+           us.up    == them ||
+           us.right == them;
+  }
+  
   public String getName()
   {
     return name;
@@ -94,6 +107,11 @@ public class Node<T>
   public Node<T> getRight()
   {
     return right;
+  }
+  
+  public Node<T> getParent()
+  {
+    return up;
   }
   
   /**
