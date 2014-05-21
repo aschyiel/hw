@@ -58,8 +58,7 @@ public class Node<T>
     {
       if ( null == left )
       {
-        left = node;
-        node.up = this;
+        setLeft( node );
       }
       else
       {
@@ -70,8 +69,7 @@ public class Node<T>
     {
       if ( null == right )
       {
-        right = node;
-        node.up = this;
+        setRight( node );
       }
       else
       {
@@ -97,6 +95,17 @@ public class Node<T>
   public String getName()
   {
     return name;
+  }
+  
+  public void setLeft( Node<T> them )
+  {
+    left = them;
+    them.up = this;
+  } 
+  public void setRight( Node<T> them )
+  {
+    right = them;
+    them.up = this;
   }
   
   public Node<T> getLeft()

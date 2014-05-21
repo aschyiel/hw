@@ -13,7 +13,7 @@ public class Solution
   private Node<Integer> root;
   private Integer target;
 
-  private Map<Node<Integer>, Map<Node<Integer>, Path>> memo;
+  protected Map<Node<Integer>, Map<Node<Integer>, Path>> memo;
   
   public Solution( Node<Integer> root, Integer target )
   {
@@ -61,7 +61,7 @@ public class Solution
   {
     return solve( a, b, a );
   }
-  private Path solve( Node<Integer> a, Node<Integer> b, Node<Integer> prev )
+  protected Path solve( Node<Integer> a, Node<Integer> b, Node<Integer> prev )
   {
     // Reuse (DP).
     Path memoPath = getMemo( a, b );
@@ -75,7 +75,7 @@ public class Solution
       return null;
     }
     
-    Path path;
+    Path path = null;
     if ( a.isAdjacent( b ) )
     {
       path = new Path( a, b );
@@ -95,11 +95,18 @@ public class Solution
       { 
         sub = solve( a.getParent(), b, a );
       }
-      path = new Path( a, sub );
+      if ( null != sub )
+      {
+        path = new Path( a, sub );
+      }
     }
     
-    setMemo( a, b, path );
-    return path;
+    if ( null != path )
+    {
+      setMemo( a, b, path );
+      return path;
+    }
+    return null;
   } 
   
   private Path getMemo( Node<Integer> a, Node<Integer> b )
