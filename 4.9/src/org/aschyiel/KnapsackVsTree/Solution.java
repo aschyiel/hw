@@ -1,6 +1,7 @@
 package org.aschyiel.KnapsackVsTree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,11 @@ public class Solution
   }
   
   /**
+   * Alphabetically sorted nodes.
+   */
+  private List<Node<Integer>> nodes = null;
+  
+  /**
    * Executes the DP stuff.
    * 
    * Chainable
@@ -31,8 +37,10 @@ public class Solution
    */
   public Solution solve()
   {
-    List<Node<Integer>> nodes = new ArrayList<Node<Integer>>();
+    nodes = new ArrayList<Node<Integer>>();
     flatten( root, nodes );
+    Collections.sort( nodes );
+
     for ( int i = 0; i < nodes.size(); i++ )
     {
       for ( int j = 0; j < nodes.size(); j++ )
@@ -42,8 +50,11 @@ public class Solution
     }
 
     return this;
-  }
+  } 
  
+  /**
+   * Flattens the tree as a list of nodes.
+   */
   private void flatten( Node<Integer> it, List<Node<Integer>> li )
   {
     if ( null != it )
@@ -52,7 +63,7 @@ public class Solution
       li.add( it );
       flatten( it.getRight(), li );
     }
-  }
+  } 
   
   /**
    * Recursively solves from point a to point b --- trolling through as necessary.
@@ -142,14 +153,13 @@ public class Solution
     // TODO: Optimization would be to keep references
     //   to exact-paths during the "trolling" process.
     List<Path> paths = new LinkedList<Path>();
-    for ( Map<?, Path> it : memo.values() )
-    { 
-      for ( Path path : it.values() )
+    for ( Node<?> a : nodes )
+    for ( Node<?> b : nodes )
+    {
+      Path path = memo.get( a ).get( b ); 
+      if ( target == path.value )
       {
-        if ( target == path.value )
-        {
-          paths.add( path );
-        }
+        paths.add( path );
       }
     }
     return paths;

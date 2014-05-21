@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * An individual tree-node.
  */
-public class Node<T>
+public class Node<T> implements Comparable<Node<T>>
 {
   
   /**
@@ -141,6 +141,12 @@ public class Node<T>
     {
       left.print( prefix  + ".   " );
     }
+  }
+
+  @Override
+  public int compareTo( Node<T> them )
+  {
+    return name.compareTo( them.name );
   }
   
 }

@@ -3,6 +3,7 @@ package org.aschyiel.KnapsackVsTree;
 import static org.junit.Assert.*;
 
 import java.util.Map;
+import java.util.List;
 
 import tree.Node;
 
@@ -25,11 +26,11 @@ public class SolutionTest
   public void setUp() throws Exception
   {
     /**
-     *        |-E
-     *    |-C-|
-     *    |   |-D
-     * A -|
-     *    |-B
+     *             |-E:1
+     *       |-C:5-|
+     *       |     |-D:15
+     * A:10 -|
+     *       |-B:11
      */
     root = new Node<Integer>( "A", 10 );
     b = new Node<Integer>( "B", 11 );
@@ -84,6 +85,24 @@ public class SolutionTest
     Map<?, Path> zi = subject.memo.get( e );
     assertTrue( zi.get( b ).value == 27 );
     assertTrue( zi.get( b ).nodes.size() == 4 );
+  }
+  
+  @Test
+  public void testGetPaths()
+  {
+    List<Path> answers = subject.solve().getPaths();
+    // GOTCHA: Includes dupe answers: A->B vs. B->A.
+    assertTrue( answers.size() == 4 ); 
+
+    // GOTCHA: Alphabetically sorted.
+    assertTrue( answers.get( 0 ).from == root );
+    assertTrue( answers.get( 0 ).to   == b );
+    assertTrue( answers.get( 1 ).from == b );
+    assertTrue( answers.get( 1 ).to   == root );
+    assertTrue( answers.get( 2 ).from == d );
+    assertTrue( answers.get( 2 ).to   == e );
+    assertTrue( answers.get( 3 ).from == e );
+    assertTrue( answers.get( 3 ).to   == d );
   }
 
 }
