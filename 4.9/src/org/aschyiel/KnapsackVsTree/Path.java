@@ -1,9 +1,10 @@
 package org.aschyiel.KnapsackVsTree;
 
-import tree.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.aschyiel.KnapsackVsTree.tree.Node;
 
 public class Path
 {

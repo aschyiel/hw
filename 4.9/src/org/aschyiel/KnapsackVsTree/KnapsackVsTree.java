@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import tree.Node;
+import org.aschyiel.KnapsackVsTree.tree.Node;
+
 
 /**
  * For question 4.9 in Cracking the Coding Interview.

@@ -1,4 +1,4 @@
-package tree;
+package org.aschyiel.KnapsackVsTree.tree;
 
 import static org.junit.Assert.*;
 

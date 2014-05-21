@@ -1,4 +1,4 @@
-package tree;
+package org.aschyiel.KnapsackVsTree.tree;
 
 import java.util.Random;
 

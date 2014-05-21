@@ -7,7 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import tree.Node;
+import org.aschyiel.KnapsackVsTree.tree.Node;
+
 
 public class Solution
 {
