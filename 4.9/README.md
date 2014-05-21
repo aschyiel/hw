@@ -9,7 +9,7 @@ My solution at a high-level:
 ---------------------
 
 Use DP, tally up each path via map-matrix, only print the exact paths later.
-This is different than the answer in the book which doesn't allow paths that go "across" the tree. ie. left->parent->right.
+It's basically the same answer as the one in the book --- although with way more lines/niceties.
 
 Output:
 ---------------------
