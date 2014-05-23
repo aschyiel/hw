@@ -3,6 +3,7 @@ package org.aschyiel.HeapSort;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -47,7 +48,7 @@ public class MaxHeapTest
       int n = r.nextInt( 99 );
       them.add( n );
       us.add( n );
-      assertTrue( them.peek() == us.peek() );
+      assertEquals( them.peek(), us.peek() );
     }
     
     // Taking it part bit by bit.
@@ -56,7 +57,7 @@ public class MaxHeapTest
       int theirMax = them.poll();
       int ourMax   = us.poll();
       
-      assertTrue( theirMax == ourMax );
+      assertEquals( theirMax, ourMax );
     } 
     
     // GOTCHA: This test won't work if we over-fill our heap;
@@ -136,6 +137,30 @@ public class MaxHeapTest
     assertTrue( heap.items.get( 0 ) == 35 );
     assertTrue( heap.items.get( 1 ) == -6 );
     assertTrue( heap.items.get( 2 ) ==  0 ); 
+  }
+  
+  @Test
+  public void testSort()
+  {
+    int n = 999999;
+    Integer[] numbers = new Integer[n];
+    Random r = new Random();
+    while ( --n > -1 )
+    {
+      numbers[n] = r.nextInt();
+    }
+    
+    MaxHeap<Integer> heap = new MaxHeap<Integer>( numbers.length );
+    heap.buildHeap( numbers );
+    
+    List<Integer> heapSortedNumbers = heap.sort();
+    List<Integer> sortedNumbers = Arrays.asList( numbers );
+    Collections.sort( sortedNumbers );
+    
+    for ( int i = 0; i < numbers.length; i++ )
+    {
+      assertEquals( sortedNumbers.get( i ), heapSortedNumbers.get( i ) );
+    }
   }
 
 }

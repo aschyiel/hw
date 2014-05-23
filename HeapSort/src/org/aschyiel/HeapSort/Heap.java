@@ -1,5 +1,7 @@
 package org.aschyiel.HeapSort; 
 
+import java.util.List;
+
 /**
 * A very basic interface representing a heap;
 * some of the terminology has been borrowed from java.util.PriorityQueue.
@@ -12,6 +14,7 @@ public interface Heap<T>
    * @param items The thing we're copying our items from.
    */
   public void buildHeap( T[] items );
+  public void buildHeap( List<T> items );
   
   /**
    * Try to add an item to the heap if it fits.
@@ -26,7 +29,7 @@ public interface Heap<T>
   /**
    * Returns the heap-sorted product.
    */
-  T[] sort();
+  List<T> sort();
   
   /**
    * Look at the top-thing in the heap.

@@ -1,6 +1,8 @@
 package org.aschyiel.HeapSort; 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -73,12 +75,18 @@ public class MaxHeap<T> implements Heap<T>
   @Override
   public void buildHeap( T[] items )
   {
+    buildHeap( Arrays.asList( items ) );
+  }
+  
+  @Override
+  public void buildHeap( List<T> items )
+  {
     _size = 0;
-    capacity = items.length;
+    capacity = items.size();
     prepareArrayList(); 
-    for ( int i = 0; i < items.length; i++ )
+    for ( int i = 0; i < items.size(); i++ )
     {
-      this.items.set( i, items[i] );
+      this.items.set( i, items.get(i) );
       _size++;
     }
     rebuildHeap();
@@ -147,10 +155,25 @@ public class MaxHeap<T> implements Heap<T>
   }
 
   @Override
-  public T[] sort()
+  public List<T> sort()
   {
-    // TODO Auto-generated method stub
-    return null;
+    int max = size();
+    List<T> li = new ArrayList<T>( max ); 
+
+    // Because Collections#fill doesn't do what you'd expect...
+    for ( int i = max; --i > -1; )
+    {
+      li.add( null );
+    }
+
+    MaxHeap<T> them = new MaxHeap<T>( max );
+    them.buildHeap( items ); 
+    while ( them.size() > 0 )
+    {
+      li.set( --max, them.poll() );
+    } 
+
+    return li;
   }
 
   //---------------------------------
