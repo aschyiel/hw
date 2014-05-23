@@ -13,17 +13,6 @@ import org.junit.Test;
 
 public class MaxHeapTest
 {
-
-  @Before
-  public void setUp() throws Exception
-  {
-  }
-
-  @After
-  public void tearDown() throws Exception
-  {
-  }
-
   @Test
   public void testBuildHeap()
   {
@@ -36,18 +25,18 @@ public class MaxHeapTest
     priorityQueue.addAll( li ); 
     heap.buildHeap( initialNumbers );
     assertTrue( heap.size() == li.size() );
-    assertTrue( heap.max() == priorityQueue.peek() );
+    assertTrue( heap.peek() == priorityQueue.peek() );
 
     Integer[] numbers = new Integer[]{ 42, 50, 7, -8, 9, 69, 101,
         109, 110, 333, 1337, 6, 7, 8, 9, 10, -3, 12, 20, 123, 41, 0, 14 };
     for ( int i = numbers.length; --i > -1 ; )
     {
-      heap.insert( numbers[i] );
+      heap.add( numbers[i] );
       priorityQueue.add( numbers[i] );
     }
     assertTrue( heap.size() == li.size() );
-    assertTrue( heap.max() == priorityQueue.peek() );
-    assertTrue( 1337 == heap.max() );
+    assertTrue( heap.peek() == priorityQueue.peek() );
+    assertTrue( 1337 == heap.peek() );
   }
   
   @Test
@@ -64,15 +53,15 @@ public class MaxHeapTest
     {
       int n = r.nextInt( 99 );
       them.add( n );
-      us.insert( n );
-      assertTrue( them.peek() == us.max() );
+      us.add( n );
+      assertTrue( them.peek() == us.peek() );
     }
     
     // Taking it part bit by bit.
     while ( them.size() > 0 )
     { 
       int theirMax = them.poll();
-      int ourMax   = us.extractMax();
+      int ourMax   = us.poll();
       
       assertTrue( theirMax == ourMax );
     } 
@@ -89,67 +78,67 @@ public class MaxHeapTest
   public void testExtract()
   {
     MaxHeap<Integer> heap = new MaxHeap<Integer>( 16 );
-    heap.insert( 10 );
-    heap.insert( 15 );
-    heap.insert( 8 );
-    heap.insert( 3 );
-    heap.insert( 2 );
+    heap.add( 10 );
+    heap.add( 15 );
+    heap.add( 8 );
+    heap.add( 3 );
+    heap.add( 2 );
     assertTrue( heap.items.get( 0 ) == 15 );
     assertTrue( heap.items.get( 1 ) == 10 );
     assertTrue( heap.items.get( 2 ) ==  8 );
     assertTrue( heap.items.get( 3 ) ==  3 );
     assertTrue( heap.items.get( 4 ) ==  2 );
     
-    assertTrue( heap.extractMax() == 15 );
-    assertTrue( heap.max() == 10 );
+    assertTrue( heap.poll() == 15 );
+    assertTrue( heap.peek() == 10 );
     assertTrue( heap.items.get( 0 ) == 10 );
     assertTrue( heap.items.get( 1 ) ==  3 );
     assertTrue( heap.items.get( 2 ) ==  8 );
     assertTrue( heap.items.get( 3 ) ==  2 );
     assertTrue( heap.items.get( 4 ) ==  null );
 
-    heap.extractMax();
+    heap.poll();
     assertTrue( heap.items.get( 0 ) ==  8 );
     assertTrue( heap.items.get( 1 ) ==  3 );
     assertTrue( heap.items.get( 2 ) ==  2 );
 
-    heap.extractMax();
+    heap.poll();
     assertTrue( heap.items.get( 0 ) ==  3 );
     assertTrue( heap.items.get( 1 ) ==  2 );
 
-    heap.extractMax();
-    assertTrue( heap.max() == 2 );
+    heap.poll();
+    assertTrue( heap.peek() == 2 );
 
-    assertTrue( 2 == heap.extractMax() );
-    assertTrue( null == heap.extractMax() );
+    assertTrue( 2 == heap.poll() );
+    assertTrue( null == heap.poll() );
   }
 
   @Test
   public void testHeapProperty()
   {
     MaxHeap<Integer> heap = new MaxHeap<Integer>( 3 );
-    heap.insert( -6 );
+    heap.add( -6 );
     assertTrue( heap.peek() == -6 );
     assertTrue( heap.items.get( 0 ) == -6 );
     
-    heap.insert( 11 );
+    heap.add( 11 );
     assertTrue( heap.peek() == 11 );
     assertTrue( heap.items.get( 0 ) == 11 );
     assertTrue( heap.items.get( 1 ) == -6 );
 
-    heap.insert( 2 );
+    heap.add( 2 );
     assertTrue( heap.peek() == 11 );
     assertTrue( heap.items.get( 0 ) == 11 );
     assertTrue( heap.items.get( 1 ) == -6 );
     assertTrue( heap.items.get( 2 ) ==  2 );
 
-    heap.insert( 35 );
+    heap.add( 35 );
     assertTrue( heap.peek() == 35 );
     assertTrue( heap.items.get( 0 ) == 35 );
     assertTrue( heap.items.get( 1 ) == -6 );
     assertTrue( heap.items.get( 2 ) == 11 );
 
-    heap.insert( 0 );
+    heap.add( 0 );
     assertTrue( heap.peek() == 35 );
     assertTrue( heap.items.get( 0 ) == 35 );
     assertTrue( heap.items.get( 1 ) == -6 );

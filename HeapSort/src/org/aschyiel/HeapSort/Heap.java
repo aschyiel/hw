@@ -1,5 +1,9 @@
 package org.aschyiel.HeapSort; 
 
+/**
+* A very basic interface representing a heap;
+* some of the terminology has been borrowed from java.util.PriorityQueue.
+*/
 public interface Heap<T>
 {
   /**
@@ -12,7 +16,7 @@ public interface Heap<T>
   /**
    * Try to add an item to the heap if it fits.
    */
-  void insert( T item ); 
+  void add( T item ); 
   
   /**
    * Returns the number of items currently inside of the heap.
@@ -28,4 +32,9 @@ public interface Heap<T>
    * Look at the top-thing in the heap.
    */
   T peek();
+
+  /**
+  * Removes and returns the top-thin in the heap.
+  */
+  T poll();
 }

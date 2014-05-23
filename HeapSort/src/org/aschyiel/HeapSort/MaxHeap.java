@@ -4,9 +4,35 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+* A fixed-sized binary-max-heap implementation.
+*/
 public class MaxHeap<T> implements Heap<T>
 {
-  
+
+  //---------------------------------
+  //
+  // Properties
+  //
+  //---------------------------------
+
+  /**
+   * The heap's comparator - set it for custom heaps.
+   * By default, organizes larger items to be placed
+   * before smaller items (Max-Heap property).
+   */
+  protected Comparator<T> comparator = new Comparator<T>()
+  { 
+    @Override
+    public int compare( T a, T b )
+    {
+      // Just assume we're working with numbers by default.
+      return ( a == b )?
+           0 : ( (Integer) a < (Integer) b )?
+           1 : -1 ;
+    }
+  };
+
   /**
    * The actual items.  I'd use an actual array directly instead
    * of an array-list, but, well. yeah.
@@ -20,22 +46,29 @@ public class MaxHeap<T> implements Heap<T>
   
   private int _size = 0;
   
+  //---------------------------------
+  //
+  // Constructor
+  //
+  //---------------------------------
+  
   public MaxHeap( int capacity )
   {
     this.capacity = capacity;
     prepareArrayList(); 
-  } 
-  
-  private void prepareArrayList()
-  {
-    items = new ArrayList<T>( capacity ); 
-
-    // Workaround for indexing bug.
-    for ( int i = capacity; i-- > 0;  )
-    {
-      items.add( null );
-    }
   }
+
+  public MaxHeap( int capacity, Comparator<T> comparator )
+  {
+    this( capacity );
+    this.comparator = comparator;
+  }
+  
+  //---------------------------------
+  //
+  // Public Methods
+  //
+  //--------------------------------- 
 
   @Override
   public void buildHeap( T[] items )
@@ -52,6 +85,92 @@ public class MaxHeap<T> implements Heap<T>
   }
 
   /**
+   * Peeks at the top of the heap and returns the "maximum" item.
+   * @return
+   */
+  @Override
+  public T peek()
+  {
+    return getItem( 1 );
+  }
+  
+  /**
+   * Returns the largest item, and mutates the heap.
+   */
+  @Override
+  public T poll()
+  {
+    T max = peek();
+    setItem( 1, null );
+    if ( _size > 1 )
+    {
+      // Swap out the last-child with the root.
+      setItem( 1, getItem( _size ) );
+      setItem( _size, null );
+      reverseHeapify( 1 );
+    }
+
+    _size--;
+    if ( _size < 0 ) 
+    {
+      _size = 0;
+    }
+    return max;
+  } 
+  
+  @Override
+  public void add( T item )
+  {
+    if ( size() < capacity )
+    {
+      // Append and rebuild from the bottom-up.
+      setItem( ++_size, item );
+    }
+    else
+    {
+      // Replace the last-item in the heap, since we're at capacity.
+      setItem( _size, item );
+    }
+    heapify( _size );
+  }
+
+  @Override
+  public String toString()
+  {
+    return items.toString();
+  } 
+  
+  @Override
+  public int size()
+  {
+    return _size;
+  }
+
+  @Override
+  public T[] sort()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  //---------------------------------
+  //
+  // not-public methods
+  //
+  //---------------------------------
+  
+  private void prepareArrayList()
+  {
+    items = new ArrayList<T>( capacity ); 
+
+    // Workaround for indexing bug.
+    for ( int i = capacity; i-- > 0;  )
+    {
+      items.add( null );
+    }
+  }
+
+  /**
   * Organize the heap from the bottom-up.
   */
   private void rebuildHeap()
@@ -63,7 +182,7 @@ public class MaxHeap<T> implements Heap<T>
   }
 
   /**
-   * Recursively heapifies from top-to-bottom (usually it's bottom-to-top).
+   * Recursively heapifies from top-to-bottom (as opposed to the usual bottom-up).
    */
   private void reverseHeapify( int idx )
   {
@@ -102,7 +221,7 @@ public class MaxHeap<T> implements Heap<T>
       reverseHeapify( idx * 2 + 1 );
     }
   }
-  
+
   /**
    * Recursively heapifies starting at the given index and sifts up.
    */
@@ -141,101 +260,8 @@ public class MaxHeap<T> implements Heap<T>
       setItem( idx / 2, item );
     }
     heapify( idx / 2);
-  } 
-  
-  /**
-   * Returns the item by index;
-   * Secretly converts the heap's one-based indices
-   * to the array-list's zero-based indices...
-   */
-  private T getItem( int idx )
-  {
-    if ( idx > _size )
-    {
-      return null;
-    }
-    idx--; 
-    return ( idx > -1 )? items.get( idx ) : null;
-  }
-  
-  /**
-   * Another heap vs. array -ism.
-   */
-  private void setItem( int idx, T it )
-  {
-    items.set( --idx, it );
-  } 
-  
-  /**
-   * The heap's comparator - set it for custom heaps.
-   * By default, organizes larger items to be placed
-   * before smaller items (Max-Heap property).
-   */
-  protected Comparator<T> comparator = new Comparator<T>()
-  { 
-    @Override
-    public int compare( T a, T b )
-    {
-      // Just assume we're working with numbers by default.
-      return ( a == b )?
-           0 : ( (Integer) a < (Integer) b )?
-           1 : -1 ;
-    }
-  };
-  
-  /**
-   * Peeks at the top of the heap and returns the "maximum" item.
-   * @return
-   */
-  public T max()
-  {
-    return getItem( 1 );
-  }
-  public T peek()
-  {
-    return max();
-  }
-  
-  /**
-   * Returns the largest item, and mutates the heap.
-   */
-  public T extractMax()
-  {
-    T max = max(); 
-    setItem( 1, null );
-    if ( _size > 1 )
-    {
-      // Swap out the last-child with the root.
-      setItem( 1, getItem( _size ) );
-      setItem( _size, null );
-      reverseHeapify( 1 );
-    }
-
-    _size--;
-    if ( _size < 0 ) 
-    {
-      _size = 0;
-    }
-    return max;
-  } 
-  
-  @Override
-  public void insert( T item )
-  {
-    if ( size() < capacity )
-    {
-      // Append and rebuild from the bottom-up.
-      setItem( ++_size, item );
-    }
-    else
-    {
-      // Replace the last-item in the heap, since we're at capacity.
-      setItem( _size, item );
-    }
-    heapify( _size );
   }
 
-  
   /**
    * Returns true if two items need to be swapped;
    * Where a is the parent (or an incoming item),
@@ -251,23 +277,27 @@ public class MaxHeap<T> implements Heap<T>
     return 1 == comparator.compare( a, b );
   }
 
-  @Override
-  public String toString()
+  /**
+   * Returns the item by index;
+   * Secretly converts the heap's one-based indices
+   * to the array-list's zero-based indices...
+   */
+  private T getItem( int idx )
   {
-    return items.toString();
-  } 
-  
-  @Override
-  public int size()
-  {
-    return _size;
+    if ( idx > _size )
+    {
+      return null;
+    }
+    idx--; 
+    return ( idx > -1 )? items.get( idx ) : null;
   }
 
-  @Override
-  public T[] sort()
+  /**
+   * Another heap vs. array -ism.
+   */
+  private void setItem( int idx, T it )
   {
-    // TODO Auto-generated method stub
-    return null;
+    items.set( --idx, it );
   }
 
 }
