@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class MaxHeapTest
@@ -17,26 +15,21 @@ public class MaxHeapTest
   public void testBuildHeap()
   {
     
-    Integer[] initialNumbers = new Integer[]{ 7, 2, 8, 3, 4, 5 };
-    MaxHeap<Integer> heap = new MaxHeap<Integer>( initialNumbers.length ); 
-    PriorityQueue<Integer> priorityQueue = new PriorityQueue<Integer>( initialNumbers.length, heap.comparator );
-
-    List<Integer> li = Arrays.asList( initialNumbers );
-    priorityQueue.addAll( li ); 
-    heap.buildHeap( initialNumbers );
-    assertTrue( heap.size() == li.size() );
-    assertTrue( heap.peek() == priorityQueue.peek() );
-
-    Integer[] numbers = new Integer[]{ 42, 50, 7, -8, 9, 69, 101,
+    Integer[] numbers = new Integer[]{ 7, 2, 8, 3, 4, 5, 42, 50, 7, -8, 9, 69, 101,
         109, 110, 333, 1337, 6, 7, 8, 9, 10, -3, 12, 20, 123, 41, 0, 14 };
-    for ( int i = numbers.length; --i > -1 ; )
-    {
-      heap.add( numbers[i] );
-      priorityQueue.add( numbers[i] );
-    }
+    MaxHeap<Integer> heap = new MaxHeap<Integer>( numbers.length ); 
+    PriorityQueue<Integer> priorityQueue = new PriorityQueue<Integer>( numbers.length, heap.comparator );
+
+    List<Integer> li = Arrays.asList( numbers );
+    priorityQueue.addAll( li ); 
+    heap.buildHeap( numbers );
     assertTrue( heap.size() == li.size() );
     assertTrue( heap.peek() == priorityQueue.peek() );
-    assertTrue( 1337 == heap.peek() );
+    
+    while ( heap.size() > 0 )
+    {
+      assertTrue( heap.poll() == priorityQueue.poll() );
+    } 
   }
   
   @Test

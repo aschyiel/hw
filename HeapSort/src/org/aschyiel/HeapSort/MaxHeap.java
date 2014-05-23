@@ -107,7 +107,7 @@ public class MaxHeap<T> implements Heap<T>
       // Swap out the last-child with the root.
       setItem( 1, getItem( _size ) );
       setItem( _size, null );
-      reverseHeapify( 1 );
+      bubbleDown( 1 );
     }
 
     _size--;
@@ -131,7 +131,7 @@ public class MaxHeap<T> implements Heap<T>
       // Replace the last-item in the heap, since we're at capacity.
       setItem( _size, item );
     }
-    heapify( _size );
+    bubbleUp( _size );
   }
 
   @Override
@@ -177,14 +177,14 @@ public class MaxHeap<T> implements Heap<T>
   { 
     for ( int i = size() / 2; i > 0; i-- )
     {
-      heapify( i );
+      bubbleDown( i );
     }
   }
 
   /**
    * Recursively heapifies from top-to-bottom (as opposed to the usual bottom-up).
    */
-  private void reverseHeapify( int idx )
+  private void bubbleDown( int idx )
   {
     if ( idx > _size )
     {
@@ -212,20 +212,20 @@ public class MaxHeap<T> implements Heap<T>
     {
       setItem(     idx, left );
       setItem( 2 * idx, item );
-      reverseHeapify( idx * 2 );
+      bubbleDown( idx * 2 );
     }
     else if ( goRight )
     {
       setItem(     idx,     right );
       setItem( 2 * idx + 1, item );
-      reverseHeapify( idx * 2 + 1 );
+      bubbleDown( idx * 2 + 1 );
     }
   }
 
   /**
    * Recursively heapifies starting at the given index and sifts up.
    */
-  private void heapify( int idx )
+  private void bubbleUp( int idx )
   {
     if ( idx == 0 )
     {
@@ -259,7 +259,7 @@ public class MaxHeap<T> implements Heap<T>
       setItem( idx,     parent );
       setItem( idx / 2, item );
     }
-    heapify( idx / 2);
+    bubbleUp( idx / 2);
   }
 
   /**
