@@ -16,8 +16,8 @@ public class QuickSort<T>
   protected List<T> items;
   
   /**
-   * Will switch over to insertion sort when there are less
-   * than however many items remaining in the sub-list.
+   * Will switch over to insertion sort when there are
+   * however many items or less remaining in the sub-list.
    */
   private int insertionSortAt = 5;
   
@@ -52,8 +52,7 @@ public class QuickSort<T>
   }
   public static <T> void sort( List<T> items, Comparator<T> comparator )
   {
-    QuickSort<T> qs = new QuickSort<T>( items, comparator );
-    qs._sort( 0, qs.randy( 0, items.size() ), items.size() );
+    ( new QuickSort<T>( items, comparator ) )._sort( 0, items.size() );
   } 
 
   //-------------------------------
@@ -70,7 +69,14 @@ public class QuickSort<T>
       @Override
       public int compare( T a, T b )
       {
-        return ( null == a )? 0 : ((Comparable) a).compareTo( b );
+        if ( null == a )
+        {
+          return 0;
+        }
+        int score = ((Comparable) a).compareTo( b );
+        return ( 0 == score )?
+           0 : ( 0  > score )?
+          -1 : +1 ;
       }
       
     };
@@ -86,9 +92,21 @@ public class QuickSort<T>
     return low + random.nextInt( 1 + high - low );
   }
   
-  private void _sort( int left, int pivot, int right )
+  private void _sort( int left, int right )
   {
-    
+    if ( right < left )
+    {
+      return;
+    } 
+    final int pivot = randy( left, right ); 
+    final T pivotItem = items.get( pivot );
+    int l = left;
+    int r = right;
+    while ( l < r )
+    {
+      
+    }
+
   }
   
   private void swap( int a, int b )
@@ -105,13 +123,16 @@ public class QuickSort<T>
   protected void _insertionSort( int left, int right )
   {
     final int min = left  - 1;
-    final Comparator<T> komparator = comparator;
+    final int max = right;
     T it;
     for ( ; right > min; right-- )
     {
-      it = items.get( right );
-      for ( int i = right - 1; i > min; i-- )
-      {
+      it = items.get( right ); 
+      
+      // Shift-them to the left (default).
+      int i;
+      for ( i = right - 1; i > min; i-- )
+      { 
         if ( 1 > comparator.compare( items.get( i ), it ) )
         {
           // Park it, and move on to the next guy.
@@ -120,8 +141,19 @@ public class QuickSort<T>
         }
         else
         {
-          // Shift them over.
-          swap( i, i + 1 );
+          swap( i, i + 1 ); 
+        }
+      }
+      
+      // Corner-case - shift them as far-right as possible.
+      if ( right + 1 < max )
+      {
+        it = items.get( right + 1 ); 
+        for ( int j = right + 1;
+            j < max && 1 == comparator.compare( it, items.get( j + 1 ) );
+            j++ )
+        {
+          swap( j, j + 1 );
         }
       }
     }
