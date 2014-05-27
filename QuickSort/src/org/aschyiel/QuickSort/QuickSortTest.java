@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,6 +32,58 @@ public class QuickSortTest
   {
     subject = null;
     numbers = null;
+  }
+  
+  @Test
+  public void testQuickSortOnSmallSample()
+  {
+    subject.insertionSortAt = 0;
+    subject._sort( 0, numbers.size() - 1 );
+    assertArrayEquals( sorted.toArray(), numbers.toArray() );
+  }
+  
+  private Random r = new Random();
+  
+  private List<Integer> getRandomNumbers( int n )
+  {
+    List<Integer> li = new ArrayList<Integer>( n ); 
+    while ( n-- > 0 )
+    {
+      li.add( r.nextInt() );
+    }
+    return li;
+  }
+
+  @Test
+  public void testQuickSortOnVeryLargeRandomNumberSample()
+  {
+    int oneMillionOrSo = 1234567;
+    List<Integer> li = getRandomNumbers( oneMillionOrSo );
+    List<Integer> ki = new ArrayList<Integer>( li );
+    QuickSort.sort( li );
+    Collections.sort( ki );
+    assertArrayEquals( ki.toArray(), li.toArray() );
+  }
+  
+  @Test
+  public void testQuickSortOnLargeRandomNumberSamples()
+  {
+    int tenThousandOrSo = 9999;
+    List<Integer> li = getRandomNumbers( tenThousandOrSo );
+    List<Integer> ki = new ArrayList<Integer>( li );
+    QuickSort.sort( li );
+    Collections.sort( ki );
+    assertArrayEquals( ki.toArray(), li.toArray() );
+  }
+  
+  @Test
+  public void testQuickSortOnMultipleLargeRandomNumberSamples()
+  {
+    int n = 99;
+    while ( n-- > 0 )
+    {
+      testQuickSortOnLargeRandomNumberSamples();
+    }
   }
   
   @Test

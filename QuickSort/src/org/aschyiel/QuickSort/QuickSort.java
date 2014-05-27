@@ -19,7 +19,9 @@ public class QuickSort<T>
    * Will switch over to insertion sort when there are
    * however many items or less remaining in the sub-list.
    */
-  private int insertionSortAt = 5;
+  // Tuned according to sorting 100k random integers, 100 times.
+  // The sweet spot seems to be around 20 ~ 30 items.
+  protected int insertionSortAt = 23;
   
   private Random random = new Random();
   
@@ -52,7 +54,7 @@ public class QuickSort<T>
   }
   public static <T> void sort( List<T> items, Comparator<T> comparator )
   {
-    ( new QuickSort<T>( items, comparator ) )._sort( 0, items.size() );
+    ( new QuickSort<T>( items, comparator ) )._sort( 0, items.size() - 1 );
   } 
 
   //-------------------------------
@@ -92,21 +94,67 @@ public class QuickSort<T>
     return low + random.nextInt( 1 + high - low );
   }
   
-  private void _sort( int left, int right )
+  /**
+   * Recursively run the quicksort algorithm until the sub-lists
+   * are small-enough to be switched over to insertion-sort.
+   */
+  protected void _sort( int left, int right )
   {
-    if ( right < left )
+    int delta = right - left;
+    if ( delta < 1 )
     {
+      // Skip sorting single-item/empty/negative sub-lists.
       return;
-    } 
-    final int pivot = randy( left, right ); 
+    }
+
+    if ( delta <= insertionSortAt )
+    {
+      _insertionSort( left, right );
+      return;
+    }
+
+    int pivot = randy( left, right ); 
     final T pivotItem = items.get( pivot );
     int l = left;
     int r = right;
+    T leftItem  = items.get( l );
+    T rightItem = items.get( r );
+    boolean needsLeftSwapped  = -1 == comparator.compare( pivotItem, leftItem );
+    boolean needsRightSwapped = 1 == comparator.compare( pivotItem, rightItem );
     while ( l < r )
     {
-      
+      if ( needsLeftSwapped && needsRightSwapped )
+      {
+        swap( l, r );
+        pivot = ( l == pivot )?
+            r : ( r == pivot )?
+            l : pivot;
+      }
+      else if ( needsLeftSwapped && l != pivot )
+      {
+        swap( l, pivot );
+        pivot = l;
+      }
+      else if ( needsRightSwapped && r != pivot )
+      {
+        swap( r, pivot );
+        pivot = r;
+      }
+
+      if ( l < pivot )
+      {
+        leftItem  = items.get( ++l );
+        needsLeftSwapped  = -1 == comparator.compare( pivotItem, leftItem  );
+      }
+      if ( pivot < r )
+      {
+        rightItem = items.get( --r ); 
+        needsRightSwapped = 1 == comparator.compare( pivotItem, rightItem );
+      }
     }
 
+    _sort( left,      pivot - 1 );
+    _sort( pivot + 1, right     );
   }
   
   private void swap( int a, int b )
